@@ -1166,7 +1166,7 @@ class Ui_Form(QWidget):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "磁体缺陷视觉检测设备"))
         self.pushButton.setText(_translate("Form", "运行界面"))
         self.pushButton_2.setText(_translate("Form", "图表分析"))
         self.pushButton_3.setText(_translate("Form", "不良明细"))
