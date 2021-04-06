@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html style ='height: 100%;background-color: rgb(255, 250, 240);'>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/echarts.min.js"></script>
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <link rel="stylesheet" href="./css/element.css">
+    <script type="text/javascript" src="./js/element.js"></script>
+    <style type="text/css">
+        body {margin:0; padding:0; overflow:hidden;height: 100%}
+    </style>
+</head>
+<body>
+    <div id="app" style ="height:6%">
+        <div style="display: flex;flex-direction: row;align-items: center;float: right;padding-bottom: 1%;justify-content: space-between" >
+            <div class="block" style="padding-right: 20px">
+                <el-date-picker
+                  v-model="value1"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期">
+                </el-date-picker>
+            </div>
+            <div style="display: flex;flex-direction: row;align-items: center" >
+                <div style="padding-right: 20px">
+                    <el-input id ='input' v-model="input" placeholder="请输入型号" size="medium" style="min-width: 100px"></el-input>
+                </div>
+                <el-row>
+                    <el-button type="primary" size="medium" @click="sendMes()" plain>搜索</el-button>
+                </el-row>
+            </div>
+        </div>
+    </div>
+    <div style="height: 94%;display: flex;flex-direction: row;justify-content: space-between">
+        <div style="width: 49%;height: 100%;display: flex;justify-content: space-between;flex-direction: column">
+            <div style="background-color: white;width:100%;height: 38%;border-radius:10px;border: #FFE4B5 2px solid ">
+                <div id="container" style="width:100%;height: 100%"></div>
+            </div>
+            <div style="background-color: white;width:100%;height: 57%;border-radius:10px;border: #FFE4B5 2px solid ">
+                <div id="container1" style="width:100%;height: 100%"></div>
+            </div>
+        </div>
+        <div style="width: 49%;height: 100%;display: flex;justify-content: space-between;flex-direction: column">
+            <div style="background-color: white;height: 47.5%;overflow: hidden;border-radius:10px;border: #FFE4B5 2px solid">
+                <div id="container3" style="width:100%;height: 100%"></div>
+            </div>
+            <div style="background-color: white;height: 47.5%;overflow: hidden;border-radius:10px;border: #FFE4B5 2px solid">
+                <div id="container4" style="width:100%;height: 100%"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="./js/awebjs.js"></script>
+<script>
+        var vim =new Vue({
+            el: '#app',
+            data(){
+                return {
+                      value1: '',
+                      input:''
+                }
+            },
+            methods: {
+              sendMes(id) {
+                  var that =this
+                  var data =[that.input,that.value1]
+                  window.printer.print(data)
+              }
+            },
+        })
+        var myChart = echarts.init(document.getElementById('container'));
+        var myChart1 = echarts.init(document.getElementById('container1'));
+        var myChart3 = echarts.init(document.getElementById('container3'));
+        var myChart4 = echarts.init(document.getElementById('container4'));
+
+        option = {
+            color:["#8fa6e0","#F56C6C"],
+            grid:{
+                bottom:'12%',
+                container:true
+            },
+            legend: {
+                data: ['合格', '劣质'],
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+                name: '月',
+                nameTextStyle: {
+                    fontWeight:600,
+                    fontSize:18
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '数量',
+                nameTextStyle:{
+                    fontWeight:600,
+                    fontSize:18
+                },
+            },
+            tooltip:{
+                trigger:"axis"
+            },
+            series: []
+        },
+        option1 = {
+            title : {
+                text: '错误类型分布图',
+                x:'center',
+                y:'2%'
+            },
+
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b} : {c} ({d}%)'
+            },
+            // legend: {
+            //     left: 'center',
+            //     top: 'bottom',
+            //     data: ['1', '2', '3']
+            // },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    type: 'pie',
+                    radius: [90, 180],
+                    center: ['50%', '50%'],
+                    // roseType: 'angle',
+                    roseType: 'radius',
+                    label : {
+                        normal : {
+                          show:true,
+                          formatter: '{b} : {c} ({d}%)',
+                          textStyle : {
+                            fontWeight : 'normal',
+                            fontSize : 15
+                          }
+                        }
+                    },
+                    data: []
+                }
+            ]
+        };
+        option2 = {
+            color:["#F56C6C","#8fa6e0"],
+            tooltip: {
+                show:true
+            },
+            legend:{
+                data:['数量']
+            },
+            xAxis: [{
+                type:'category',
+                data:["总数","合格","劣质"]
+            }],
+            yAxis: [{
+                type:'value'
+            }],
+            series:[{
+                "name":"数量",
+                "type":"bar",
+                "data":[]
+            }]
+        },
+        option3 = {
+            legend: {
+                orient: 'horizontal', // 'vertical'
+                x: '9%', // 'center' | 'left' | {number},
+                y: '80%', // 'center' | 'bottom' | {number}
+            },
+            title: {
+                text: '总合格率\n',
+                subtext:'',
+                x: '8%',
+                y: '25%',
+                textStyle: {
+                    fontWeight: 'normal',
+                    fontSize: 40,
+                    color:'#2F4554'
+                },
+                subtextStyle: {
+                    fontSize: 50,
+                    color: '#009966'
+                }
+            },
+            graphic:{
+                type:"text",
+                left:'10%',
+                top: '25%',
+                style:{}
+            },
+            series : [{
+                type: 'pie',
+                center:['70%','50%'],
+                radius: ['40%', '75%'],
+                color:["#8fa6e0","#F56C6C"],
+                label : {
+                    normal : {
+                      show:true,
+                      // formatter: '{c} ({d}%)',
+                      formatter:'{c}',
+                      textStyle : {
+                        fontWeight : 'normal',
+                        fontSize : 15
+                      }
+                    }
+                },
+                data:[]
+            }]
+        },
+        option4 = {
+            color:["#8fa6e0","#F56C6C"],
+            grid: {
+                bottom: '3%',
+                containLabel: true
+            },
+            legend: {
+                data: ['合格', '劣质']
+            },
+            xAxis: {
+                type: 'category',   // 还有其他的type
+                data: [],   // x轴数据
+                name: '天',   // x轴名称
+                nameTextStyle: {
+                  fontWeight: 600,
+                  fontSize: 18
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '数量',   // y轴名称
+                nameTextStyle: {
+                  fontWeight: 600,
+                  fontSize: 18
+                }
+            },
+            tooltip: {
+                trigger: 'axis'   // axis   item   none三个值
+            },
+            series: []
+        }
+    window.onload = function() {
+        new QWebChannel(qt.webChannelTransport, function (channel) {
+            window.printer= channel.objects.printer;
+        });
+    };
+    function updata(msg) {
+        msg =JSON.parse(msg)
+        option4.series =msg[0][0]
+        option4.xAxis.data =msg[0][1]
+        option3.series[0].data =msg[1][1]
+        option1.series[0].data =msg[1][0]
+        option.series =msg[0][2]
+        option3.title.subtext =msg[1][2][0]+"%"
+        myChart.setOption(option);
+        myChart4.setOption(option4);
+        myChart1.setOption(option1);
+        myChart3.setOption(option3);
+
+    }
+    window.addEventListener("resize", function () {
+      myChart.resize();
+      myChart1.resize();
+      myChart3.resize();
+      myChart4.resize();
+    });
+</script>
+</html>

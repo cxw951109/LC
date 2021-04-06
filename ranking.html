@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" style ='height: 100%;background-color: rgb(255, 250, 240);'>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <link rel="stylesheet" href="./css/element.css">
+    <script type="text/javascript" src="./js/element.js"></script>
+</head>
+<body style="height: 80%;padding-top:75px">
+    <div id="app" style="justify-content: space-between;display: flex;flex-direction: column;height: 100%">
+        <div class="fl fdc" v-for="(item,index) in progressData" :key="index" style="padding-left: 50px" >
+            <div class="fl fdr progress_title" style="display: flex;justify-content: space-between; padding-bottom: 20px;padding-right: 50px">
+                <div class="p1 aifs" style="font-size:28px">{{item.name}}</div>
+                <div class="p1 fl jcfe" style="font-size:28px">{{item.value}}%</div>
+            </div>
+            <el-progress :percentage="percentage(index)" :stroke-width="height" :color="customColor(index)"></el-progress>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="./js/awebjs.js"></script>
+<script>
+    var vim =new Vue({
+        el: '#app',
+        data(){
+            return {
+                customColor(val){switch (val) {
+                    case 0:
+                        return '#1bf8f3'
+                    case 1:
+                        return '#3196e8'
+                    case 2:
+                        return '#feb046'
+                    case 3:
+                        return '#e8484f'
+                    case 4:
+                        return '#9174e4'
+                }},
+                percentage(val){
+                    return this.progressData[val]["value"]
+                },
+                progressData:[{'name':'类型1','value':'0'},{'name':'类型2','value':'0'},{'name':'类型3','value':'0'},{'name':'类型4','value':'0'},{'name':'类型5','value':'0'}],
+                height:50
+            };
+        }
+    })
+    window.onload = function() {
+        new QWebChannel(qt.webChannelTransport, function (channel3) {
+            window.printer3= channel3.objects.printer3;
+        });
+    };
+    function uptext(msg) {
+        vim.progressData =JSON.parse(msg)
+    }
+</script>
+<style lang="scss">
+    .el-progress{
+        width: 100%;
+    }
+    .el-progress-bar__outer{border-radius:0;background-color:white}
+
+    .el-progress-bar__inner{border-radius:5px;}
+
+    .el-progress__text{display:none;}
+
+</style>
+</html>
