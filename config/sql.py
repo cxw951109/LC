@@ -1,3 +1,4 @@
+import json
 import datetime
 from pydantic import BaseModel
 from sqlalchemy.orm import sessionmaker,relationship
@@ -172,6 +173,18 @@ class Alert(Base):
     id = Column(Integer(), primary_key=True,autoincrement=True)
     mes =Column(String(100))
     created_time = Column(String(20))
+
+
+    def __init__(self, mes,created_time):
+        self.mes = mes
+        self.created_time = created_time
+
+    def to_dict(self):
+        return {
+            "id":self.id,
+            "mes": self.mes,
+            "created_time": self.created_time,
+        }
 
 
 class History(Base):

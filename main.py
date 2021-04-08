@@ -12,7 +12,6 @@ import os
 import re
 import sys
 import time
-import json
 import threading
 from config.sql import *
 from PyQt5.QtGui import *
@@ -27,6 +26,16 @@ from PyQt5.QtWidgets import QApplication, QWidget,QStackedLayout
 
 
 app = FastAPI()
+
+def create_data():
+    if os.path.exists('c:/data/param.json'):
+        pass
+    else:
+        filename = 'c:/data/param.json'
+        data = {"mix_area": 1, "max_area": 3, "region_area1": 1, "region_area2": 3, "num": 2}
+        with open(filename, 'w') as file_obj:
+            json.dump(data, file_obj)
+
 
 class Worker(QThread, QObject):
     breakSignals = pyqtSignal(list)
@@ -92,6 +101,15 @@ class Print3(QObject):
     @pyqtSlot(list, result=list)
     def print(self, content):
         self.changeList3.emit(content)
+        return content
+
+
+class Print4(QObject):
+    changeList4 = pyqtSignal(list)
+
+    @pyqtSlot(list, result=list)
+    def print(self, content):
+        self.changeList4.emit(content)
         return content
 
 
@@ -435,6 +453,175 @@ class F(object):
             session.close()
 
 
+class G(object):
+    def setupUi(self, Form):
+        self.gridLayout = QtWidgets.QGridLayout(Form)
+        self.gridLayout.setContentsMargins(20, 20, 20, 20)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setSpacing(30)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setSpacing(30)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.label = QtWidgets.QLabel(Form)
+        self.horizontalLayout.addWidget(self.label)
+        self.lineEdit = QtWidgets.QLineEdit(Form)
+        self.lineEdit.setMinimumSize(QtCore.QSize(0, 40))
+        self.lineEdit.setStyleSheet("border-radius:2px;background-color: rgb(255, 255, 255);border: 1px solid rgb(200, 200, 200)")
+        self.horizontalLayout.addWidget(self.lineEdit)
+        self.label_5 = QtWidgets.QLabel(Form)
+        self.label_5.setStyleSheet("color: rgb(255, 0, 0);")
+        self.horizontalLayout.addWidget(self.label_5)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.label_4 = QtWidgets.QLabel(Form)
+        self.horizontalLayout_2.addWidget(self.label_4)
+        self.lineEdit_4 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_4.setMinimumSize(QtCore.QSize(0, 40))
+        self.lineEdit_4.setStyleSheet(
+            "border-radius:2px;background-color: rgb(255, 255, 255);border: 1px solid rgb(200, 200, 200)")
+        self.horizontalLayout_2.addWidget(self.lineEdit_4)
+        self.label_6 = QtWidgets.QLabel(Form)
+        self.label_6.setStyleSheet("color: rgb(255, 0, 0);")
+        self.horizontalLayout_2.addWidget(self.label_6)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout_4.addLayout(self.verticalLayout)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.label_2 = QtWidgets.QLabel(Form)
+        self.horizontalLayout_3.addWidget(self.label_2)
+        self.lineEdit_2 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.lineEdit_2.setStyleSheet(
+            "border-radius:2px;background-color: rgb(255, 255, 255);border: 1px solid rgb(200, 200, 200)")
+        self.horizontalLayout_3.addWidget(self.lineEdit_2)
+        self.lineEdit_3 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_3.setMinimumSize(QtCore.QSize(0, 40))
+        self.lineEdit_3.setStyleSheet(
+            "border-radius:2px;background-color: rgb(255, 255, 255);border: 1px solid rgb(200, 200, 200)")
+        self.horizontalLayout_3.addWidget(self.lineEdit_3)
+        self.label_3 = QtWidgets.QLabel(Form)
+        self.horizontalLayout_3.addWidget(self.label_3)
+        self.lineEdit_5 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_5.setMinimumSize(QtCore.QSize(0, 40))
+        self.lineEdit_5.setStyleSheet(
+            "border-radius:2px;background-color: rgb(255, 255, 255);border: 1px solid rgb(200, 200, 200)")
+        self.horizontalLayout_3.addWidget(self.lineEdit_5)
+        self.label_7 = QtWidgets.QLabel(Form)
+        self.label_7.setStyleSheet("color: rgb(255, 0, 0);")
+        self.horizontalLayout_3.addWidget(self.label_7)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.gridLayout.addLayout(self.verticalLayout_2, 0, 0, 1, 2)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 601, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem1, 1, 0, 1, 1)
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem2)
+        self.pushButton = QtWidgets.QPushButton(Form)
+        self.pushButton.setMinimumSize(QtCore.QSize(120, 40))
+        self.pushButton.setStyleSheet("QPushButton\n"
+                                         "                    {text-align : center;\n"
+                                         "                     color:gray;\n"
+                                         "                     font: bold;\n"
+                                         "                     border-radius:10px;\n"
+                                         "                     border-top-color: #888888;\n"
+                                         "                     border-left-color: #888888;\n"
+                                         "                     border-right-color: #CCCCCC;\n"
+                                         "                     border-bottom-color: #CCCCCC;\n"
+                                         "                     border-top-width:2px;\n"
+                                         "                     border-left-width:3px;\n"
+                                         "                     border-right-width:3px;\n"
+                                         "                     border-bottom-width:4px;\n"
+                                         "                     background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop: 0 #E5E5E5, stop: 1 #B7B7B7);\n"
+                                         "                     background-color: rgb(255, 254, 249);\n"
+                                         "                     border-style: outset;\n"
+                                         "                     font : 14px;}\n"
+                                         "                     QPushButton:pressed\n"
+                                         "                     {text-align : center;\n"
+                                         "                      background-color : light gray;\n"
+                                         "                      font: bold;\n"
+                                         "                      border-top-color: #888888;\n"
+                                         "                      border-left-color: #888888;\n"
+                                         "                      border-right-color: #CCCCCC;\n"
+                                         "                      border-bottom-color: #CCCCCC;\n"
+                                         "                      border-width: 2px;\n"
+                                         "                      border-style: outset;\n"
+                                         "                      font : 14px;}\n"
+                                         "\n"
+                                         "")
+        self.pushButton.clicked.connect(self.set_config)
+        self.horizontalLayout_5.addWidget(self.pushButton)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem3)
+        self.gridLayout.addLayout(self.horizontalLayout_5, 2, 1, 1, 1)
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label.setText(_translate("Form", "最小面积(mm²)："))
+        self.label_5.setText(_translate("Form", "（低于这个数值为ok）"))
+        self.label_4.setText(_translate("Form", "最大面积(mm²)："))
+        self.label_6.setText(_translate("Form", "（大于这个数值为ng）"))
+        self.label_2.setText(_translate("Form", "面积区域(mm²)："))
+        self.label_3.setText(_translate("Form", "数量："))
+        self.label_7.setText(_translate("Form", "（两个面积之间且计数小于规定值为ok，否则ng）"))
+        self.pushButton.setText(_translate("Form", "确定"))
+
+
+    def set_config(self):
+        self.mix_area = self.lineEdit.text()
+        self.max_area = self.lineEdit_4.text()
+        self.region_area1 = self.lineEdit_2.text()
+        self.region_area2 = self.lineEdit_3.text()
+        self.num = self.lineEdit_5.text()
+        if self.mix_area and self.max_area and self.region_area1 and self.region_area2 and self.num:
+            try:
+                a = float(self.mix_area)
+                b = float(self.max_area)
+                c = float(self.region_area1)
+                d = float(self.region_area2)
+                e = float(self.num)
+                data ={"mix_area":self.a,"max_area":self.b,"region_area1":self.c,"region_area2":self.d,"num":self.e}
+                filename = 'c:/data/param.json'
+                with open(filename, 'w') as file_obj:
+                    json.dump(data, file_obj)
+            except:
+                reply = QMessageBox.information(self, '信息', '信息有误！',
+                                                QMessageBox.Yes | QMessageBox.No)
+        else:
+            reply = QMessageBox.information(self, '信息', '信息缺失！',
+                                            QMessageBox.Yes | QMessageBox.No)
+
+
+class H(object):
+    def setupUi(self, Form):
+        self.gridLayout = QtWidgets.QGridLayout(Form)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.widget = QtWidgets.QWidget()
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.widget)
+        self.tab4 = QWebEngineView(self.widget)
+        self.channel4 = QWebChannel()
+        self.printer4 = Print4()
+        # self.printer4.changeList4.connect(self.getrank)
+        self.channel4.registerObject('printer4', self.printer4)
+        self.tab4.page().setWebChannel(self.channel4)
+        self.tab4.load(QUrl("file:///./alert.html"))
+        self.gridLayout_2.addWidget(self.tab4, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+
+
 class FramePage1(QWidget, A):
     def __init__(self):
         super().__init__()
@@ -471,6 +658,18 @@ class FramePage6(QWidget, F):
         self.setupUi(self)
 
 
+class FramePage7(QWidget, G):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
+class FramePage8(QWidget, H):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
 class Ui_Form(QWidget):
     t1 = Worker(tag=3)
     timer = QTimer()
@@ -486,6 +685,8 @@ class Ui_Form(QWidget):
         self.Page4 = FramePage4()
         self.Page5 = FramePage5()
         self.Page6 = FramePage6()
+        self.Page7 = FramePage7()
+        self.Page8 = FramePage8()
         # 加入到布局中
         self.qsl.addWidget(self.Page1)
         self.qsl.addWidget(self.Page2)
@@ -493,6 +694,8 @@ class Ui_Form(QWidget):
         self.qsl.addWidget(self.Page4)
         self.qsl.addWidget(self.Page5)
         self.qsl.addWidget(self.Page6)
+        self.qsl.addWidget(self.Page7)
+        self.qsl.addWidget(self.Page8)
         # 控制函数
         self.controller()
 
@@ -508,6 +711,8 @@ class Ui_Form(QWidget):
         self.pushButton_13.clicked.connect(self.switch)
         self.pushButton_14.clicked.connect(self.switch)
         self.pushButton_15.clicked.connect(self.switch)
+        self.pushButton_16.clicked.connect(self.switch)
+        self.pushButton_17.clicked.connect(self.switch)
 
     def switch(self):
         sender = self.sender().objectName()
@@ -523,9 +728,9 @@ class Ui_Form(QWidget):
             "Page3":3,
             "Page4":4,
             "Page5": 5,
+            "Page6":6,
+            "Page7":7
         }
-        # if index[sender] ==2:
-        #     self.frame_4.setVisible(False)
         self.qsl.setCurrentIndex(index[sender])
 
     def setupUi(self):
@@ -767,10 +972,9 @@ class Ui_Form(QWidget):
         self.gridLayout_5.addWidget(self.pushButton_10, 0, 0, 1, 1)
         self.gridLayout_3.addWidget(self.frame_4, 0, 0, 2, 1)
         self.frame_3 = QtWidgets.QFrame(self.frame)
-        self.frame_3.setStyleSheet("background-color: rgb(255, 244, 247);")
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setStyleSheet("background-color: rgb(255, 244, 247);\n"
+        self.frame_3.setStyleSheet("background-color:  rgb(255, 244, 247);\n"
                                    "border-top-right-radius:0px;\n"
                                    "border-top-left-radius:0px")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.frame_3)
@@ -797,7 +1001,7 @@ class Ui_Form(QWidget):
         self.horizontalLayout_4.addWidget(self.label_6)
         self.gridLayout_6.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
         self.label_4 = QtWidgets.QLabel(self.frame_3)
-        self.label_4.setStyleSheet("background-color: rgb(255, 237, 235);\n"
+        self.label_4.setStyleSheet("background-color: white;\n"
                                    "border: 1px solid #EDEDED;\n"
                                    ";border-radius: 10px;\n"
                                    "padding:3px")
@@ -805,9 +1009,9 @@ class Ui_Form(QWidget):
         self.gridLayout_6.addWidget(self.label_4, 2, 0, 1, 1)
         self.gridLayout_3.addWidget(self.frame_3, 1, 1, 1, 1)
         self.gridLayout_2 = QtWidgets.QGridLayout()
-        self.gridLayout_2.setContentsMargins(5, 5, 5, 30)
+        self.gridLayout_2.setContentsMargins(5, 5, 5, 25)
         self.gridLayout_2.setHorizontalSpacing(12)
-        self.gridLayout_2.setVerticalSpacing(40)
+        self.gridLayout_2.setVerticalSpacing(25)
         self.pushButton_3 = QtWidgets.QPushButton(self.frame)
         self.pushButton_3.setMinimumSize(QtCore.QSize(110, 40))
         self.pushButton_3.setStyleSheet("QPushButton\n"
@@ -1012,6 +1216,74 @@ class Ui_Form(QWidget):
                                         "")
         self.pushButton_2.setIconSize(QtCore.QSize(20, 20))
         self.gridLayout_2.addWidget(self.pushButton_2, 1, 0, 1, 1)
+        self.pushButton_16 = QtWidgets.QPushButton(self.frame)
+        self.pushButton_16.setMinimumSize(QtCore.QSize(110, 40))
+        self.pushButton_16.setStyleSheet("QPushButton\n"
+                                         "                    {text-align : center;\n"
+                                         "                     color:gray;\n"
+                                         "                     border-radius:10px;\n"
+                                         "                     font: bold;\n"
+                                         "                     border-top-color: #888888;\n"
+                                         "                     border-left-color: #888888;\n"
+                                         "                     border-right-color: #CCCCCC;\n"
+                                         "                     border-bottom-color: #CCCCCC;\n"
+                                         "                     border-top-width:2px;\n"
+                                         "                     border-left-width:3px;\n"
+                                         "                     border-right-width:3px;\n"
+                                         "                     border-bottom-width:4px;\n"
+                                         "                     background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop: 0 #E5E5E5, stop: 1 #B7B7B7);\n"
+                                         "                     background-color: rgb(255, 254, 249);\n"
+                                         "                     border-style: outset;\n"
+                                         "                     font : 14px;}\n"
+                                         "                     QPushButton:pressed\n"
+                                         "                     {text-align : center;\n"
+                                         "                      background-color : light gray;\n"
+                                         "                      font: bold;\n"
+                                         "                      border-top-color: #888888;\n"
+                                         "                      border-left-color: #888888;\n"
+                                         "                      border-right-color: #CCCCCC;\n"
+                                         "                      border-bottom-color: #CCCCCC;\n"
+                                         "                      border-width: 2px;\n"
+                                         "                      border-style: outset;\n"
+                                         "                      font : 14px;}\n"
+                                         "\n"
+                                         "")
+        self.pushButton_16.setIconSize(QtCore.QSize(20, 20))
+        self.gridLayout_2.addWidget(self.pushButton_16, 3, 0, 1, 1)
+        self.pushButton_17 = QtWidgets.QPushButton(self.frame)
+        self.pushButton_17.setMinimumSize(QtCore.QSize(110, 40))
+        self.pushButton_17.setStyleSheet("QPushButton\n"
+                                         "                    {text-align : center;\n"
+                                         "                     color:gray;\n"
+                                         "                     border-radius:10px;\n"
+                                         "                     font: bold;\n"
+                                         "                     border-top-color: #888888;\n"
+                                         "                     border-left-color: #888888;\n"
+                                         "                     border-right-color: #CCCCCC;\n"
+                                         "                     border-bottom-color: #CCCCCC;\n"
+                                         "                     border-top-width:2px;\n"
+                                         "                     border-left-width:3px;\n"
+                                         "                     border-right-width:3px;\n"
+                                         "                     border-bottom-width:4px;\n"
+                                         "                     background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop: 0 #E5E5E5, stop: 1 #B7B7B7);\n"
+                                         "                     background-color: rgb(255, 254, 249);\n"
+                                         "                     border-style: outset;\n"
+                                         "                     font : 14px;}\n"
+                                         "                     QPushButton:pressed\n"
+                                         "                     {text-align : center;\n"
+                                         "                      background-color : light gray;\n"
+                                         "                      font: bold;\n"
+                                         "                      border-top-color: #888888;\n"
+                                         "                      border-left-color: #888888;\n"
+                                         "                      border-right-color: #CCCCCC;\n"
+                                         "                      border-bottom-color: #CCCCCC;\n"
+                                         "                      border-width: 2px;\n"
+                                         "                      border-style: outset;\n"
+                                         "                      font : 14px;}\n"
+                                         "\n"
+                                         "")
+        self.pushButton_17.setIconSize(QtCore.QSize(20, 20))
+        self.gridLayout_2.addWidget(self.pushButton_17, 3, 1, 1, 1)
         self.gridLayout_3.addLayout(self.gridLayout_2, 0, 1, 1, 1)
         self.gridLayout.addWidget(self.frame, 0, 1, 1, 1)
         self.frame_5 = QtWidgets.QFrame(self)
@@ -1155,6 +1427,8 @@ class Ui_Form(QWidget):
         self.pushButton_5.clicked.connect(self.lab5)
         self.pushButton_6.clicked.connect(self.lab6)
         self.pushButton_7.clicked.connect(self.check)
+        self.pushButton_16.clicked.connect(self.lab8)
+        self.pushButton_17.clicked.connect(self.lab9)
         self.pushButton_15.clicked.connect(lambda:self.lab3('所有'))
         self.pushButton_14.clicked.connect(lambda:self.lab3('类目5'))
         self.pushButton_13.clicked.connect(lambda:self.lab3('类目4'))
@@ -1174,6 +1448,8 @@ class Ui_Form(QWidget):
         self.pushButton_5.setText(_translate("Form", "产品录入"))
         self.pushButton_6.setText(_translate("Form", "模板档案"))
         self.pushButton_7.setText(_translate("Form", "确认更换"))
+        self.pushButton_16.setText(_translate("Form", "参数配置"))
+        self.pushButton_17.setText(_translate("Form", "故障记录"))
         self.pushButton_8.setText(_translate("Form", "启动"))
         self.pushButton_9.setText(_translate("Form", "停止"))
         self.pushButton_15.setText(_translate("Form", "所有"))
@@ -1193,8 +1469,24 @@ class Ui_Form(QWidget):
         self.pushButton_13.setObjectName("Page2_3")
         self.pushButton_14.setObjectName("Page2_4")
         self.pushButton_15.setObjectName("Page2_5")
+        self.pushButton_16.setObjectName("Page6")
+        self.pushButton_17.setObjectName("Page7")
+
+    def lab9(self):
+        self.t1.Flag = False
+        self.frame_4.setVisible(False)
+        session = MySession()
+        lists = session.query(Alert).order_by(Alert.id.desc()).limit(2000)
+        session.close()
+        lists = [x.to_dict() for x in lists]
+        self.Page8.tab4.page().runJavaScript("window.uptext('{}')".format(json.dumps(lists)))
+
+    def lab8(self):
+        self.t1.Flag = False
+        self.frame_4.setVisible(False)
 
     def lab7(self):
+        self.t1.Flag = False
         self.frame_4.setVisible(True)
 
     def lab6(self,e):
@@ -1208,9 +1500,11 @@ class Ui_Form(QWidget):
 
     def lab5(self):
         self.t1.Flag = False
+        self.frame_4.setVisible(False)
 
     def lab4(self):
         self.t1.Flag = False
+        self.frame_4.setVisible(False)
         session = MySession()
         result =rank(session)
         session.close()
@@ -1237,6 +1531,7 @@ class Ui_Form(QWidget):
 
     def lab1(self):
         self.t1.Flag = False
+        self.frame_4.setVisible(False)
 
     # 获取echarts数据
     def getchart(self, data):
@@ -1246,9 +1541,9 @@ class Ui_Form(QWidget):
     def get_types(self):
         names = session.query(Standard).filter(Standard.flag == 1).first()
         if names:
-            self.label.setText("当前检测型号：" + names.name)
+            self.label.setText("当前检测型号: " + names.name)
         else:
-            self.label.setText("当前检测型号:")
+            self.label.setText("当前检测型号: ")
         name = session.query(Standard.name).filter(Standard.flag != 2).all()
         name = [r for (r,) in name]
         self.comboBox.clear()
@@ -1264,7 +1559,7 @@ class Ui_Form(QWidget):
             session.commit()
             session.query(Standard).filter(Standard.flag != 2, Standard.name == text).update({Standard.flag: 1}, synchronize_session=False)
             session.commit()
-            self.label.setText("当前检测型号:" + text)
+            self.label.setText("当前检测型号: " + text)
         else:
             pass
 
@@ -1285,12 +1580,29 @@ class Ui_Form(QWidget):
                              "<font style = 'font-size:20px; color:#e4686e;'> 次品率"+str(b)+"%"+"</font>")
 
 
+@app.post('/error/')
+async def error_mes(item:Item):
+    session4 = MySession()
+    form.label_4.setText(item.msg)
+    t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    try:
+        session4.add(Alert(mes =item.msg,created_time=t))
+        session4.commit()
+        session4.close()
+    except:
+        session4.close()
+        print('error入库失败！')
+    return {"status":200}
+
+
 @app.post('/result/')
 async def result_mes(item:Item2):
     goodNum =100
     badNum=19
     t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     form.label_4.setText("合格数：" + str(goodNum) + "   劣质数：" + str(badNum) +"\n"+"\n"+ "时间：" + str(t))
+
+
     # session1 = MySession()
     # badNum = item.ng_count
     # goodNum = item.total -badNum
@@ -1369,6 +1681,7 @@ server_thread.start()
 
 
 if __name__ == "__main__":
+    create_data()
     app = QApplication(sys.argv)
     form = Ui_Form()
     form.show()

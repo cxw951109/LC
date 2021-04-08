@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" style ='height: 100%;background-color: rgb(255, 250, 240);'>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <link rel="stylesheet" href="./css/element.css">
+    <script type="text/javascript" src="./js/element.js"></script>
+</head>
+<body>
+    <div>
+        <div id="app">
+            <el-table
+              :data="tableData"
+              border
+              :row-style="{height:'150px'}"
+              style="width: 100%;font-size: 20px"
+              :header-cell-style="{textAlign: 'center'}"
+              :header-row-style="{height: '80px'}"
+              :cell-style="{textAlign: 'center'}">
+              <el-table-column
+                prop="id"
+                label="序号">
+              </el-table-column>
+              <el-table-column
+                prop="mes"
+                label="信息">
+              </el-table-column>
+              <el-table-column
+                prop="created_time"
+                label="日期">
+              </el-table-column>
+            </el-table>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="./js/awebjs.js"></script>
+<script>
+    var vim =new Vue({
+        el: '#app',
+        data(){
+            return {
+                tableData: []
+            }
+        },
+        methods: {
+        },
+    })
+    window.onload = function() {
+        new QWebChannel(qt.webChannelTransport, function (channel4) {
+            window.printer4= channel4.objects.printer4;
+        });
+    };
+    function uptext(msg) {
+        vim.tableData =JSON.parse(msg)
+    }
+
+</script>
+</html>
