@@ -218,7 +218,7 @@ class C(object):
             lists = session.query(History).filter(History.standard_name.like("%" + e[0] + "%"),History.types.like("%" + self.type + "%"),History.created_time.between(target_res,today)).order_by(History.id.desc()).limit(2000)
         lists = [x.to_dict() for x in lists]
         session.close()
-        self.tab2.page().runJavaScript("window.uptext('{}')".format(json.dumps(lists)))
+        self.tab2.page().runJavaScript("window.uptext('{}','{}','{}')".format(json.dumps(lists),self.type,0))
 
 
 class D(object):
@@ -399,6 +399,7 @@ class E(object):
                 self.image=''
                 self.lineEdit.clear()
                 self.label_2.setPixmap(QPixmap(''))
+                form.comboBox.addItem(self.name)
             else:
                 reply = QMessageBox.information(self, '信息', '该型号已存在！',
                                                 QMessageBox.Yes | QMessageBox.No)
@@ -586,10 +587,15 @@ class G(object):
                 c = float(self.region_area1)
                 d = float(self.region_area2)
                 e = float(self.num)
-                data ={"mix_area":self.a,"max_area":self.b,"region_area1":self.c,"region_area2":self.d,"num":self.e}
+                data ={"mix_area":a,"max_area":b,"region_area1":c,"region_area2":d,"num":e}
                 filename = 'c:/data/param.json'
                 with open(filename, 'w') as file_obj:
                     json.dump(data, file_obj)
+                self.lineEdit.clear()
+                self.lineEdit_4.clear()
+                self.lineEdit_2.clear()
+                self.lineEdit_3.clear()
+                self.lineEdit_5.clear()
             except:
                 reply = QMessageBox.information(self, '信息', '信息有误！',
                                                 QMessageBox.Yes | QMessageBox.No)
@@ -713,6 +719,7 @@ class Ui_Form(QWidget):
         self.pushButton_15.clicked.connect(self.switch)
         self.pushButton_16.clicked.connect(self.switch)
         self.pushButton_17.clicked.connect(self.switch)
+        self.pushButton_20.clicked.connect(self.switch)
 
     def switch(self):
         sender = self.sender().objectName()
@@ -725,6 +732,7 @@ class Ui_Form(QWidget):
             "Page2_3": 2,
             "Page2_4": 2,
             "Page2_5": 2,
+            "Page2_6": 2,
             "Page3":3,
             "Page4":4,
             "Page5": 5,
@@ -735,6 +743,7 @@ class Ui_Form(QWidget):
 
     def setupUi(self):
         self.resize(1550, 900)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
         self.setBaseSize(QtCore.QSize(0, 0))
         self.timer.timeout.connect(self.change_today)
         self.timer.start(1000)
@@ -970,6 +979,42 @@ class Ui_Form(QWidget):
                                          "")
         self.pushButton_10.setIconSize(QtCore.QSize(20, 20))
         self.gridLayout_5.addWidget(self.pushButton_10, 0, 0, 1, 1)
+
+        self.pushButton_20 = QtWidgets.QPushButton(self.frame_4)
+        self.pushButton_20.setMinimumSize(QtCore.QSize(90, 40))
+        self.pushButton_20.setStyleSheet("QPushButton\n"
+                                         "                    {text-align : center;\n"
+                                         "                     color:gray;\n"
+                                         "                     font: bold;\n"
+                                         "                     border-radius:10px;\n"
+                                         "                     border-top-color: #888888;\n"
+                                         "                     border-left-color: #888888;\n"
+                                         "                     border-right-color: #CCCCCC;\n"
+                                         "                     border-bottom-color: #CCCCCC;\n"
+                                         "                     border-top-width:2px;\n"
+                                         "                     border-left-width:3px;\n"
+                                         "                     border-right-width:3px;\n"
+                                         "                     border-bottom-width:4px;\n"
+                                         "                     background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop: 0 #E5E5E5, stop: 1 #B7B7B7);\n"
+                                         "                     background-color: rgb(255, 254, 249);\n"
+                                         "                     border-style: outset;\n"
+                                         "                     font : 14px;}\n"
+                                         "                     QPushButton:pressed\n"
+                                         "                     {text-align : center;\n"
+                                         "                      background-color : light gray;\n"
+                                         "                      font: bold;\n"
+                                         "                      border-top-color: #888888;\n"
+                                         "                      border-left-color: #888888;\n"
+                                         "                      border-right-color: #CCCCCC;\n"
+                                         "                      border-bottom-color: #CCCCCC;\n"
+                                         "                      border-width: 2px;\n"
+                                         "                      border-style: outset;\n"
+                                         "                      font : 14px;}\n"
+                                         "\n"
+                                         "")
+        self.pushButton_20.setIconSize(QtCore.QSize(20, 20))
+        self.gridLayout_5.addWidget(self.pushButton_20, 6, 0, 1, 1)
+
         self.gridLayout_3.addWidget(self.frame_4, 0, 0, 2, 1)
         self.frame_3 = QtWidgets.QFrame(self.frame)
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -1302,13 +1347,41 @@ class Ui_Form(QWidget):
         self.label.setStyleSheet("color: rgb(255, 0, 0);")
         self.verticalLayout.addWidget(self.label)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
+
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.label_7 = QtWidgets.QLabel(self.frame_5)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
+        self.label_7.setSizePolicy(sizePolicy)
+        self.label_7.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.horizontalLayout_5.addWidget(self.label_7)
+        self.lineEdit = QtWidgets.QLineEdit(self.frame_5)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lineEdit.sizePolicy().hasHeightForWidth())
+        self.lineEdit.setSizePolicy(sizePolicy)
+        self.lineEdit.setMinimumSize(QtCore.QSize(0, 36))
+        self.lineEdit.setStyleSheet("border: 1px solid #CCCCCC;\n"
+                                    "border-bottom-right-radius:0px;\n"
+                                    "border-bottom-left-radius:0px")
+        self.horizontalLayout_5.addWidget(self.lineEdit)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         self.comboBox = QtWidgets.QComboBox(self.frame_5)
-        self.comboBox.setStyleSheet("border-radius:4px;\n"
-                                    "border: 1px solid rgb(200, 200, 200);")
         self.comboBox.setMinimumSize(QtCore.QSize(0, 36))
-        self.horizontalLayout.addWidget(self.comboBox)
+        self.comboBox.setStyleSheet("border-radius:4px;\n"
+                                      "border: 1px solid rgb(200, 200, 200);")
+        self.verticalLayout_2.addWidget(self.comboBox)
+        self.horizontalLayout.addLayout(self.verticalLayout_2)
         self.pushButton_7 = QtWidgets.QPushButton(self.frame_5)
-        self.pushButton_7.setMinimumSize(QtCore.QSize(80, 40))
+        self.pushButton_7.setMinimumSize(QtCore.QSize(80, 80))
         self.pushButton_7.setMaximumSize(QtCore.QSize(100, 16777215))
         self.pushButton_7.setStyleSheet("QPushButton\n"
                                         "                    {text-align : center;\n"
@@ -1343,8 +1416,53 @@ class Ui_Form(QWidget):
         self.pushButton_7.setIconSize(QtCore.QSize(20, 20))
         self.horizontalLayout.addWidget(self.pushButton_7)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        spacerItem = QtWidgets.QSpacerItem(20, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
+
+        # self.comboBox = QtWidgets.QComboBox(self.frame_5)
+        # self.comboBox.setStyleSheet("border-radius:4px;\n"
+        #                             "border: 1px solid rgb(200, 200, 200);")
+        # self.comboBox.setMinimumSize(QtCore.QSize(0, 36))
+        # self.horizontalLayout.addWidget(self.comboBox)
+        #
+        # self.pushButton_7 = QtWidgets.QPushButton(self.frame_5)
+        # self.pushButton_7.setMinimumSize(QtCore.QSize(80, 40))
+        # self.pushButton_7.setMaximumSize(QtCore.QSize(100, 16777215))
+        # self.pushButton_7.setStyleSheet("QPushButton\n"
+        #                                 "                    {text-align : center;\n"
+        #                                 "                     color:gray;\n"
+        #                                 "                     font: bold;\n"
+        #                                 "                     border-radius:10px;\n"
+        #                                 "                     border-top-color: #888888;\n"
+        #                                 "                     border-left-color: #888888;\n"
+        #                                 "                     border-right-color: #CCCCCC;\n"
+        #                                 "                     border-bottom-color: #CCCCCC;\n"
+        #                                 "                     border-top-width:2px;\n"
+        #                                 "                     border-left-width:3px;\n"
+        #                                 "                     border-right-width:3px;\n"
+        #                                 "                     border-bottom-width:4px;\n"
+        #                                 "                     background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop: 0 #E5E5E5, stop: 1 #B7B7B7);\n"
+        #                                 "                     background-color: rgb(255, 254, 249);\n"
+        #                                 "                     border-style: outset;\n"
+        #                                 "                     font : 14px;}\n"
+        #                                 "                     QPushButton:pressed\n"
+        #                                 "                     {text-align : center;\n"
+        #                                 "                      background-color : light gray;\n"
+        #                                 "                      font: bold;\n"
+        #                                 "                      border-top-color: #888888;\n"
+        #                                 "                      border-left-color: #888888;\n"
+        #                                 "                      border-right-color: #CCCCCC;\n"
+        #                                 "                      border-bottom-color: #CCCCCC;\n"
+        #                                 "                      border-width: 2px;\n"
+        #                                 "                      border-style: outset;\n"
+        #                                 "                      font : 14px;}\n"
+        #                                 "\n"
+        #                                 "")
+        # self.pushButton_7.setIconSize(QtCore.QSize(20, 20))
+        # self.horizontalLayout.addWidget(self.pushButton_7)
+        # self.verticalLayout.addLayout(self.horizontalLayout)
+        # spacerItem = QtWidgets.QSpacerItem(20, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        # self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSpacing(12)
         self.pushButton_8 = QtWidgets.QPushButton(self.frame_5)
@@ -1430,17 +1548,19 @@ class Ui_Form(QWidget):
         self.pushButton_16.clicked.connect(self.lab8)
         self.pushButton_17.clicked.connect(self.lab9)
         self.pushButton_15.clicked.connect(lambda:self.lab3('所有'))
-        self.pushButton_14.clicked.connect(lambda:self.lab3('类目5'))
-        self.pushButton_13.clicked.connect(lambda:self.lab3('类目4'))
-        self.pushButton_12.clicked.connect(lambda:self.lab3('类目3'))
-        self.pushButton_11.clicked.connect(lambda:self.lab3('类目2'))
-        self.pushButton_10.clicked.connect(lambda:self.lab3('类目1'))
+        self.pushButton_14.clicked.connect(lambda:self.lab3('气孔/杂物'))
+        self.pushButton_13.clicked.connect(lambda:self.lab3('边角掉块'))
+        self.pushButton_12.clicked.connect(lambda:self.lab3('端面掉块'))
+        self.pushButton_11.clicked.connect(lambda:self.lab3('刀痕'))
+        self.pushButton_10.clicked.connect(lambda:self.lab3('裂纹'))
+        self.pushButton_20.clicked.connect(lambda: self.lab3('单号'))
         QtCore.QMetaObject.connectSlotsByName(self)
         self.get_types()
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "磁体缺陷视觉检测设备"))
+        self.label_7.setText(_translate("Form", "单号："))
         self.pushButton.setText(_translate("Form", "运行界面"))
         self.pushButton_2.setText(_translate("Form", "图表分析"))
         self.pushButton_3.setText(_translate("Form", "不良明细"))
@@ -1451,13 +1571,14 @@ class Ui_Form(QWidget):
         self.pushButton_16.setText(_translate("Form", "参数配置"))
         self.pushButton_17.setText(_translate("Form", "故障记录"))
         self.pushButton_8.setText(_translate("Form", "启动"))
-        self.pushButton_9.setText(_translate("Form", "停止"))
+        self.pushButton_9.setText(_translate("Form", "清除批次记录"))
         self.pushButton_15.setText(_translate("Form", "所有"))
-        self.pushButton_14.setText(_translate("Form", "类目5"))
-        self.pushButton_13.setText(_translate("Form", "类目4"))
-        self.pushButton_12.setText(_translate("Form", "类目3"))
-        self.pushButton_11.setText(_translate("Form", "类目2"))
-        self.pushButton_10.setText(_translate("Form", "类目1"))
+        self.pushButton_14.setText(_translate("Form", "气孔/杂物"))
+        self.pushButton_13.setText(_translate("Form", "边角掉块"))
+        self.pushButton_12.setText(_translate("Form", "端面掉块"))
+        self.pushButton_11.setText(_translate("Form", "刀痕"))
+        self.pushButton_10.setText(_translate("Form", "裂纹"))
+        self.pushButton_20.setText(_translate("Form", "单号"))
         self.pushButton.setObjectName("Page0")
         self.pushButton_2.setObjectName("Page1")
         self.pushButton_6.setObjectName("Page5")
@@ -1471,6 +1592,7 @@ class Ui_Form(QWidget):
         self.pushButton_15.setObjectName("Page2_5")
         self.pushButton_16.setObjectName("Page6")
         self.pushButton_17.setObjectName("Page7")
+        self.pushButton_20.setObjectName("Page2_6")
 
     def lab9(self):
         self.t1.Flag = False
@@ -1513,16 +1635,21 @@ class Ui_Form(QWidget):
     def lab3(self,e):
         self.t1.Flag = False
         self.frame_4.setVisible(False)
+        s =0
         session = MySession()
         if e =='所有':
             lists = session.query(History).order_by(History.id.desc()).limit(2000)
             self.Page3.type = ''
+        elif e =='单号':
+            lists = session.query(Dailydata2).filter(Dailydata2.flag ==1).order_by(Dailydata2.id.desc()).limit(100)
+            self.Page3.type = ''
+            s=1
         else:
             lists = session.query(History).filter(History.types == e).order_by(History.id.desc()).limit(2000)
             self.Page3.type = e
         session.close()
         lists = [x.to_dict() for x in lists]
-        self.Page3.tab2.page().runJavaScript("window.uptext('{}','{}')".format(json.dumps(lists),e))
+        self.Page3.tab2.page().runJavaScript("window.uptext('{}','{}','{}')".format(json.dumps(lists),e,s))
 
     def lab2(self,e):
         self.t1.Flag = True
@@ -1539,11 +1666,12 @@ class Ui_Form(QWidget):
 
     #获取检测型号
     def get_types(self):
-        names = session.query(Standard).filter(Standard.flag == 1).first()
-        if names:
-            self.label.setText("当前检测型号: " + names.name)
+        # names = session.query(Standard).filter(Standard.flag == 1).first()
+        re = session.query(Dailydata2.odd_num, Dailydata2.standard_name).filter(Dailydata2.flag == 0).first()
+        if re:
+            self.label.setText("当前检测型号及单号: " + re.standard_name+','+re.odd_num)
         else:
-            self.label.setText("当前检测型号: ")
+            self.label.setText("当前检测型号及单号: ")
         name = session.query(Standard.name).filter(Standard.flag != 2).all()
         name = [r for (r,) in name]
         self.comboBox.clear()
@@ -1554,14 +1682,44 @@ class Ui_Form(QWidget):
     #更换检测型号
     def check(self):
         text = self.comboBox.currentText()
-        if text != "请选择型号":
-            session.query(Standard).filter(Standard.flag == 1).update({Standard.flag: 0}, synchronize_session=False)
-            session.commit()
-            session.query(Standard).filter(Standard.flag != 2, Standard.name == text).update({Standard.flag: 1}, synchronize_session=False)
-            session.commit()
-            self.label.setText("当前检测型号: " + text)
+        text1 = self.lineEdit.text()
+        t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        if text != "请选择型号" and text1 != '':
+            re = session.query(Dailydata2.odd_num, Dailydata2.standard_name).filter(Dailydata2.flag == 0).first()
+            if re:
+                if re.odd_num != text1 or text != re.standard_name:
+                    session.query(Standard).filter(Standard.flag == 1).update({Standard.flag: 0},
+                                                                              synchronize_session=False)
+                    session.commit()
+                    session.query(Standard).filter(Standard.flag != 2, Standard.name == text).update({Standard.flag: 1},
+                                                                                                     synchronize_session=False)
+                    session.commit()
+                    self.label.setText("当前检测型号及单号: " + text+','+text1)
+                    session.query(Dailydata2).filter(Dailydata2.flag == 0).update({Dailydata2.flag: 1},
+                                                                                  synchronize_session=False)
+                    session.add(
+                        Dailydata2(standard_name=text, type1=0, type2=0, type3=0, type4=0, type5=0, odd_num=text1,
+                                   goodNum=0,
+                                   badNum=0, created_time=t))
+                    session.commit()
+            else:
+                session.query(Standard).filter(Standard.flag == 1).update({Standard.flag: 0},
+                                                                          synchronize_session=False)
+                session.commit()
+                session.query(Standard).filter(Standard.flag != 2, Standard.name == text).update({Standard.flag: 1},
+                                                                                                 synchronize_session=False)
+                session.commit()
+                self.label.setText("当前检测型号及单号: " + text+','+text1)
+                session.add(
+                    Dailydata2(standard_name=text, type1=0, type2=0, type3=0, type4=0, type5=0, odd_num=text1,
+                               goodNum=0,
+                               badNum=0, created_time=t))
+                session.commit()
+
         else:
-            pass
+            reply = QMessageBox.information(self, '信息', '请输入型号和单号！',
+                                            QMessageBox.Yes | QMessageBox.No)
+
 
     #首页数量统计
     def change_today(self):

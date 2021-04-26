@@ -5,9 +5,8 @@ from sqlalchemy.orm import sessionmaker,relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String,Integer,create_engine,ForeignKey
 
-# engine = create_engine('mysql+mysqlconnector://root:%s@localhost:3306/demo5' % 1111,pool_size=10)
-engine = create_engine('mysql+pymysql://root:%s@localhost:3306/demo5' % 1111,pool_size=10)
-dic = {"1": "类型1", "2": "类型2","3": "类型3", "4": "类型4","5": "类型5"}
+engine = create_engine('mysql+pymysql://root:%s@localhost:3306/demo6' % 1111,pool_size=10)
+dic = {"1": "裂纹", "2": "刀痕","3": "端面掉块", "4": "边角掉块","5": "气孔/杂物"}
 
 Base = declarative_base()
 
@@ -114,9 +113,20 @@ def chart2(session,value,start,end):
 
 #排名
 def rank(session):
-    today = datetime.date.today()
-    query1 = session.query(Baddata).filter(Baddata.created_time == str(today)).all()
-    all =sum([x.Num for x in query1])
+    # today = datetime.date.today()
+    # query1 = session.query(Baddata).filter(Baddata.created_time == str(today)).all()
+    # all =sum([x.Num for x in query1])
+    # names = list(dic.values())
+    # series2 = []
+    # if all ==0:
+    #     for i in names:
+    #         series2.append({"value":0.00,"name":i})
+    # else:
+    #     for i in names:
+    #         series2.append({"value":'%.2f' % (sum([x.Num for x in query1 if x.types == i])*100/all),"name":i})
+    # return  series2
+    query = session.query(Dailydata2).filter(Dailydata2.flag == 0).first()
+    all =query.goodNum+query.badNum
     names = list(dic.values())
     series2 = []
     if all ==0:
@@ -124,13 +134,23 @@ def rank(session):
             series2.append({"value":0.00,"name":i})
     else:
         for i in names:
-            series2.append({"value":'%.2f' % (sum([x.Num for x in query1 if x.types == i])*100/all),"name":i})
+            if i =='裂纹':
+                bad =query.type1
+            elif i =='刀痕':
+                bad =query.type2
+            elif i =='端面掉块':
+                bad =query.type3
+            elif i =='边角掉块':
+                bad =query.type4
+            elif i =='气孔/杂物':
+                bad =query.type5
+            series2.append({"value":'%.2f' % (bad*100/all),"name":i})
     return  series2
 
 #今日数据
 def get_today():
     session2 = MySession()
-    query = session2.query(Dailydata2).first()
+    query = session2.query(Dailydata2).filter(Dailydata2.flag == 0).first()
     session2.close()
     if query:
         all =query.goodNum+query.badNum
@@ -155,6 +175,45 @@ class Dailydata2(Base):
     id = Column(Integer(), primary_key=True,autoincrement=True)
     goodNum = Column(Integer)
     badNum = Column(Integer)
+    standard_name = Column(String(20))
+    odd_num = Column(String(20))
+    type1 = Column(Integer)
+    type2 = Column(Integer)
+    type3 = Column(Integer)
+    type4 = Column(Integer)
+    type5 = Column(Integer)
+    created_time = Column(String(20))
+    flag = Column(Integer,default=0)
+
+    def __init__(self, goodNum, badNum,standard_name,odd_num,type1,type2,type3,type4,type5,created_time,flag):
+        self.goodNum = goodNum
+        self.standard_name = standard_name
+        self.badNum = badNum
+        self.created_time = created_time
+        self.odd_num = odd_num
+        self.type1 = type1
+        self.type2 = type2
+        self.type3 = type3
+        self.type4 = type4
+        self.type5 = type5
+        self.flag = flag
+        self.created_time = created_time
+
+    def to_dict(self):
+        return {
+            "id":self.id,
+            "standard_name": self.standard_name,
+            "odd_num": self.odd_num,
+            "goodNum":self.goodNum,
+            "created_time": self.created_time,
+            "badNum": self.badNum,
+            "type1": self.type1,
+            "type2": self.type2,
+            "type3": self.type3,
+            "type4": self.type4,
+            "type5": self.type5,
+            "flag": self.flag,
+        }
 
 
 class Baddata(Base):
@@ -259,9 +318,9 @@ Base.metadata.create_all(engine)
 MySession = sessionmaker(bind=engine)
 session = MySession()
 try:
-    res = session.query(Dailydata2).first()
-    if not res:
-        session.add(Dailydata2(goodNum=0, badNum=0))
+    # res = session.query(Dailydata2).first()
+    # if not res:
+    #     session.add(Dailydata2(goodNum=0, badNum=0))
     today = datetime.date.today()
     session.query(History).filter(History.created_time <= today - datetime.timedelta(days=30)).delete()
     session.commit()
